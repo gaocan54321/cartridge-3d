@@ -5,8 +5,8 @@ type BI = { zh: string; en: string }
 
 /* ---------------- 全局 UI 文案 ---------------- */
 export const ui: Record<string, BI> = {
-  tagline1: { zh: '前端工程师 · 应届毕业生', en: 'Frontend Engineer · New Grad' },
-  tagline2: { zh: '专注交互体验与 WebGL 创意开发', en: 'Focused on interaction & WebGL' },
+  tagline1: { zh: '高灿 · 杭州电子科技大学', en: 'Gao Can · HDU' },
+  tagline2: { zh: '电子信息工程 · 机器视觉 × 嵌入式 × AI Agent', en: 'Vision × Embedded × AI Agent' },
   insertHint: { zh: '点击卡带 · 插入以继续', en: 'Click a cartridge to insert' },
   hoverHint: { zh: '把鼠标悬停在卡带上 · Hover a cartridge', en: 'Hover a cartridge' },
   downloadCv: { zh: '下载简历', en: 'Download CV' },
@@ -21,21 +21,21 @@ export const ui: Record<string, BI> = {
 
 /* ---------------- ① 个人简介 ---------------- */
 export const profile = {
-  name: { zh: '你的名字', en: 'Your Name' } as BI,
-  role: { zh: '前端工程师 / 创意开发者', en: 'Frontend / Creative Developer' } as BI,
+  name: { zh: '高灿', en: 'Gao Can' } as BI,
+  role: { zh: '电子信息工程 · 新工科实验班', en: 'Electronic Information Engineering' } as BI,
   bio: {
-    zh: '一句话自我介绍占位：热爱把设计稿变成有生命力的交互体验，正在寻找前端工程师岗位。',
-    en: 'Bio placeholder: I love turning designs into living interactions. Looking for a frontend role.',
+    zh: '杭州电子科技大学，电子信息新工科实验班（电子信息工程方向）。对机器视觉、嵌入式与 AI Agent 都感兴趣，喜欢把想法做成能跑起来的东西。',
+    en: 'HDU, Electronic Information Engineering. Into machine vision, embedded systems and AI agents.',
   } as BI,
-  skills: ['React', 'TypeScript', 'Three.js', 'WebGL', 'Tailwind CSS', 'Node.js'],
-  location: { zh: '中国 · 城市', en: 'City, China' } as BI,
+  skills: ['Python', 'C', '机器视觉', '嵌入式', 'AI Agent', 'WorkFlow', '全栈', 'Waytoagi', '观猹'],
+  location: { zh: '浙江 · 杭州', en: 'Hangzhou, China' } as BI,
 }
 
 /* ---------------- ② 联系方式 ---------------- */
 export const contact = {
-  wechat: 'your-wechat-id',
-  qq: '123456789',
-  email: 'you@example.com',
+  wechat: 'gaocan54321',
+  qq: '2104471242',
+  email: '2104471242@qq.com',
 }
 
 /* ---------------- ③ 社媒链接 ---------------- */
@@ -47,7 +47,7 @@ export interface SocialLink {
   color: string
 }
 export const socials: SocialLink[] = [
-  { id: 'github', name: { zh: 'GitHub', en: 'GitHub' }, handle: '@yourname', url: 'https://github.com/yourname', color: '#17171b' },
+  { id: 'github', name: { zh: 'GitHub', en: 'GitHub' }, handle: '@gaocan54321', url: 'https://github.com/gaocan54321', color: '#17171b' },
   { id: 'xiaohongshu', name: { zh: '小红书', en: 'RED' }, handle: '@你的小红书', url: 'https://www.xiaohongshu.com', color: '#ff2442' },
   { id: 'douyin', name: { zh: '抖音', en: 'Douyin' }, handle: '@你的抖音', url: 'https://www.douyin.com', color: '#161823' },
   { id: 'bilibili', name: { zh: '哔哩哔哩', en: 'Bilibili' }, handle: 'UID: 占位', url: 'https://www.bilibili.com', color: '#00a1d6' },
