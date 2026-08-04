@@ -303,9 +303,7 @@ export default function CartridgeGallery({ lang, onInsert }: Props) {
       <div ref={mountRef} className="absolute inset-0" />
 
       <footer className="pointer-events-none absolute inset-x-0 bottom-6 flex justify-center select-none">
-        <p className="rounded-full bg-white/60 px-4 py-1.5 text-xs text-slate-500 shadow-sm backdrop-blur">
-          {ui.hoverHint[lang]}
-        </p>
+        <p className="text-3d-title">{ui.heroTitle[lang]}</p>
       </footer>
     </div>
   )

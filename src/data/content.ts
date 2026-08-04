@@ -5,10 +5,7 @@ type BI = { zh: string; en: string }
 
 /* ---------------- 全局 UI 文案 ---------------- */
 export const ui: Record<string, BI> = {
-  tagline1: { zh: '高灿 · 杭州电子科技大学', en: 'Gao Can · HDU' },
-  tagline2: { zh: '电子信息工程 · 机器视觉 × 嵌入式 × AI Agent', en: 'Vision × Embedded × AI Agent' },
-  insertHint: { zh: '点击卡带 · 插入以继续', en: 'Click a cartridge to insert' },
-  hoverHint: { zh: '把鼠标悬停在卡带上 · Hover a cartridge', en: 'Hover a cartridge' },
+  heroTitle: { zh: 'Hey！这是我的电子简历', en: 'Hey! This is my e-resume' },
   downloadCv: { zh: '下载简历', en: 'Download CV' },
   eject: { zh: '⏏ 拔出卡带', en: '⏏ Eject' },
   copy: { zh: '复制', en: 'Copy' },

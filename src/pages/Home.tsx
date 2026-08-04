@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Download } from 'lucide-react'
 import CartridgeGallery from '../components/CartridgeGallery'
 import Character from '../components/Character'
+import ButterflyCursor from '../components/ButterflyCursor'
 import SectionModal from '../components/modals/SectionModal'
 import AboutCard from '../components/modals/AboutCard'
 import ContactCard from '../components/modals/ContactCard'
@@ -28,6 +29,7 @@ export default function Home() {
 
   return (
     <div className="relative">
+      <ButterflyCursor />
       <CartridgeGallery lang={lang} onInsert={setSection} />
 
       {/* 顶部工具栏 */}
@@ -47,9 +49,8 @@ export default function Home() {
           Insert cartridge to continue
         </p>
         <h1 className="mt-2 text-2xl font-bold tracking-tight text-slate-700">
-          {ui.tagline1[lang]}
+          我叫高灿，期待和你相遇！
         </h1>
-        <p className="mt-1 text-sm text-slate-500">{ui.tagline2[lang]}</p>
       </header>
 
       {/* 交互人物：头跟着鼠标转 */}
