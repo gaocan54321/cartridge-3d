@@ -1,18 +1,29 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { createCartridge, type Cartridge, type CartridgeConfig } from '../three/createCartridge'
+import { ui, type Lang, type SectionId } from '../data/content'
+
+const SECTION_ORDER: SectionId[] = ['about', 'contact', 'social', 'projects', 'campus', 'hobbies']
 
 const CARTRIDGES: CartridgeConfig[] = [
-  { label: 'blank', shellColor: '#eef0f3' },
-  { label: 'vercel', shellColor: '#17171b', accentColor: '#0c0c0f' },
-  { label: 'github', shellColor: '#a9c3e6', accentColor: '#8fadd6' },
-  { label: 'azure', shellColor: '#d9c9a1', accentColor: '#c9b78d' },
-  { label: 'microsoft', shellColor: '#cfc9b8', accentColor: '#bcb5a2' },
-  { label: 'tuenti', shellColor: '#31405e', accentColor: '#263350' },
+  { label: 'about', shellColor: '#eef0f3' },
+  { label: 'contact', shellColor: '#17171b', accentColor: '#0c0c0f' },
+  { label: 'social', shellColor: '#a9c3e6', accentColor: '#8fadd6' },
+  { label: 'projects', shellColor: '#d9c9a1', accentColor: '#c9b78d' },
+  { label: 'campus', shellColor: '#cfc9b8', accentColor: '#bcb5a2' },
+  { label: 'hobbies', shellColor: '#31405e', accentColor: '#263350' },
 ]
 
-export default function CartridgeGallery() {
+interface Props {
+  lang: Lang
+  /** 插入动画播放完毕后回调，由父组件打开对应内容面板 */
+  onInsert: (id: SectionId) => void
+}
+
+export default function CartridgeGallery({ lang, onInsert }: Props) {
   const mountRef = useRef<HTMLDivElement>(null)
+  const onInsertRef = useRef(onInsert)
+  onInsertRef.current = onInsert
 
   useEffect(() => {
     const mount = mountRef.current
@@ -39,6 +50,7 @@ export default function CartridgeGallery() {
     const baseCamZ = 12.6
     camera.position.set(0, 2.6, baseCamZ)
     camera.lookAt(0, 0.05, 0)
+    let camZoom = 1 // 插入动画时相机推进
 
     /* ---------- lights ---------- */
     scene.add(new THREE.HemisphereLight('#ffffff', '#c9d2de', 1.15))
@@ -82,6 +94,7 @@ export default function CartridgeGallery() {
       cart.baseY = (0.5 - row) * spacingY + 0.15
       cart.group.position.y = cart.baseY
       cart.group.rotation.x = -0.06
+      cart.group.userData.sectionId = SECTION_ORDER[i]
       scene.add(cart.group)
       carts.push(cart)
     })
@@ -91,14 +104,42 @@ export default function CartridgeGallery() {
     const pointer = new THREE.Vector2(-10, -10)
     let hoveredCart: Cartridge | null = null
 
-    const onPointerMove = (e: PointerEvent) => {
+    const updatePointer = (e: PointerEvent) => {
       const rect = renderer.domElement.getBoundingClientRect()
       pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1
       pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1
     }
+    const onPointerMove = (e: PointerEvent) => updatePointer(e)
     const onPointerLeave = () => pointer.set(-10, -10)
     renderer.domElement.addEventListener('pointermove', onPointerMove)
     renderer.domElement.addEventListener('pointerleave', onPointerLeave)
+
+    /* ---------- click → insert ---------- */
+    let inserting: { cart: Cartridge; t0: number; fired: boolean } | null = null
+    let downX = 0
+    let downY = 0
+
+    const pick = (): Cartridge | null => {
+      raycaster.setFromCamera(pointer, camera)
+      const hits = raycaster.intersectObjects(carts.map((c) => c.group), true)
+      if (!hits.length) return null
+      const root = hits[0].object.userData.cartridgeRoot as THREE.Group
+      return carts.find((c) => c.group === root) ?? null
+    }
+
+    const onPointerDown = (e: PointerEvent) => {
+      downX = e.clientX
+      downY = e.clientY
+    }
+    const onPointerUp = (e: PointerEvent) => {
+      if (inserting) return
+      if (Math.hypot(e.clientX - downX, e.clientY - downY) > 8) return
+      updatePointer(e)
+      const cart = pick()
+      if (cart) inserting = { cart, t0: clock.getElapsedTime(), fired: false }
+    }
+    renderer.domElement.addEventListener('pointerdown', onPointerDown)
+    renderer.domElement.addEventListener('pointerup', onPointerUp)
 
     /* ---------- subtle camera parallax ---------- */
     let targetCamX = 0
@@ -114,27 +155,67 @@ export default function CartridgeGallery() {
     /* ---------- animation loop ---------- */
     const clock = new THREE.Clock()
     let raf = 0
+    const INSERT_DURATION = 0.62
 
     const animate = () => {
       raf = requestAnimationFrame(animate)
       const t = clock.getElapsedTime()
       const dt = Math.min(clock.getDelta() + 0.016, 0.05)
 
-      // hover picking
-      raycaster.setFromCamera(pointer, camera)
-      const roots = carts.map((c) => c.group)
-      const hits = raycaster.intersectObjects(roots, true)
-      const root = hits.length ? (hits[0].object.userData.cartridgeRoot as THREE.Group) : null
-      const next = carts.find((c) => c.group === root) ?? null
-      if (next !== hoveredCart) {
-        if (hoveredCart) hoveredCart.hovered = false
-        hoveredCart = next
-        if (hoveredCart) hoveredCart.hovered = true
-        renderer.domElement.style.cursor = hoveredCart ? 'pointer' : 'default'
+      // hover picking（插入动画期间冻结 hover）
+      if (!inserting) {
+        const next = pick()
+        if (next !== hoveredCart) {
+          if (hoveredCart) hoveredCart.hovered = false
+          hoveredCart = next
+          if (hoveredCart) hoveredCart.hovered = true
+          renderer.domElement.style.cursor = hoveredCart ? 'pointer' : 'default'
+        }
+      } else {
+        if (hoveredCart) {
+          hoveredCart.hovered = false
+          hoveredCart = null
+        }
+        renderer.domElement.style.cursor = 'default'
+      }
+
+      // 插入动画进度
+      let insertP = 0
+      if (inserting) {
+        insertP = Math.min(1, (t - inserting.t0) / INSERT_DURATION)
+        if (insertP >= 1 && !inserting.fired) {
+          inserting.fired = true
+          const id = inserting.cart.group.userData.sectionId as SectionId
+          onInsertRef.current(id)
+        }
+        if (insertP >= 1) {
+          // 面板已覆盖屏幕，瞬间复位卡带与相机
+          const c = inserting.cart.group
+          c.position.z = 0
+          c.position.y = inserting.cart.baseY
+          c.rotation.x = -0.06
+          c.scale.setScalar(1)
+          inserting = null
+          insertP = 0
+        }
       }
 
       carts.forEach((cart) => {
         const g = cart.group
+        const isInsert = inserting?.cart === cart
+
+        if (isInsert) {
+          // 卡带被"插入"：下沉 + 推向屏幕深处 + 镜头拉近
+          const e = insertP * insertP * (3 - 2 * insertP) // smoothstep
+          g.position.z = THREE.MathUtils.lerp(g.position.z, -3.2, e * 0.35)
+          g.position.y = THREE.MathUtils.lerp(g.position.y, cart.baseY - 1.1, e * 0.3)
+          g.rotation.x = THREE.MathUtils.damp(g.rotation.x, -0.55, 8, dt)
+          g.rotation.z = THREE.MathUtils.damp(g.rotation.z, 0, 8, dt)
+          const s = THREE.MathUtils.damp(g.scale.x, 1.12, 8, dt)
+          g.scale.setScalar(s)
+          return
+        }
+
         const idleBob = Math.sin(t * 0.9 + cart.phase) * 0.06
         const idleSway = Math.sin(t * 0.55 + cart.phase * 1.7) * 0.025
 
@@ -152,12 +233,21 @@ export default function CartridgeGallery() {
         g.scale.setScalar(s)
       })
 
+      // 插入时镜头推近
+      camZoom = THREE.MathUtils.damp(camZoom, inserting ? 0.86 : 1, 5, dt)
       camera.position.x = THREE.MathUtils.damp(camera.position.x, targetCamX, 3, dt)
       camera.position.y = THREE.MathUtils.damp(camera.position.y, targetCamY, 3, dt)
       camera.lookAt(0, 0.05, 0)
+      applyCamZ()
 
       renderer.render(scene, camera)
     }
+
+    const applyCamZ = () => {
+      const fit = Math.max(1, 1.5 / camera.aspect)
+      camera.position.z = baseCamZ * fit * camZoom
+    }
+
     animate()
 
     /* ---------- resize ---------- */
@@ -165,8 +255,7 @@ export default function CartridgeGallery() {
       const w = mount.clientWidth
       const h = mount.clientHeight
       camera.aspect = w / h
-      // pull back on narrow viewports so all six cartridges stay in frame
-      camera.position.z = baseCamZ * Math.max(1, 1.5 / camera.aspect)
+      applyCamZ()
       camera.updateProjectionMatrix()
       renderer.setSize(w, h)
     }
@@ -181,6 +270,8 @@ export default function CartridgeGallery() {
       window.removeEventListener('pointermove', onParallax)
       renderer.domElement.removeEventListener('pointermove', onPointerMove)
       renderer.domElement.removeEventListener('pointerleave', onPointerLeave)
+      renderer.domElement.removeEventListener('pointerdown', onPointerDown)
+      renderer.domElement.removeEventListener('pointerup', onPointerUp)
       scene.traverse((obj) => {
         if (obj instanceof THREE.Mesh) {
           obj.geometry.dispose()
@@ -206,19 +297,9 @@ export default function CartridgeGallery() {
     >
       <div ref={mountRef} className="absolute inset-0" />
 
-      {/* header overlay */}
-      <header className="pointer-events-none absolute inset-x-0 top-0 flex flex-col items-center pt-8 select-none">
-        <p className="text-[11px] font-semibold tracking-[0.35em] text-slate-400 uppercase">
-          Insert cartridge to continue
-        </p>
-        <h1 className="mt-2 text-2xl font-bold tracking-tight text-slate-700">
-          Career, in cartridges
-        </h1>
-      </header>
-
       <footer className="pointer-events-none absolute inset-x-0 bottom-6 flex justify-center select-none">
         <p className="rounded-full bg-white/60 px-4 py-1.5 text-xs text-slate-500 shadow-sm backdrop-blur">
-          把鼠标悬停在卡带上 · Hover a cartridge
+          {ui.hoverHint[lang]}
         </p>
       </footer>
     </div>
