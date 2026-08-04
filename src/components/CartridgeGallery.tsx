@@ -174,6 +174,8 @@ export default function CartridgeGallery({ onInsert }: Props) {
           hoveredCart = next
           if (hoveredCart) hoveredCart.hovered = true
           renderer.domElement.style.cursor = hoveredCart ? 'pointer' : 'default'
+          // 通知蝴蝶光标：悬停卡带 → 收翅停下
+          window.dispatchEvent(new CustomEvent('cart-hover', { detail: !!hoveredCart }))
         }
       } else {
         if (hoveredCart) {
