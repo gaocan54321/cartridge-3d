@@ -13,11 +13,11 @@ import { ui, type Lang, type SectionId } from '../data/content'
 
 const SECTION_META: Record<SectionId, { no: string; zh: string; en: string; accent: string }> = {
   about: { no: '01', zh: '简介', en: 'ABOUT ME', accent: '#31405e' },
-  contact: { no: '02', zh: '联系方式', en: 'CONTACT', accent: '#07c160' },
+  contact: { no: '02', zh: '联系', en: 'CONTACT', accent: '#07c160' },
   social: { no: '03', zh: '社媒', en: 'SOCIAL LINKS', accent: '#2f6fd6' },
   projects: { no: '04', zh: '项目', en: 'PROJECTS', accent: '#c0392b' },
-  campus: { no: '05', zh: '校园经历', en: 'CAMPUS LIFE', accent: '#31405e' },
-  hobbies: { no: '06', zh: '兴趣爱好', en: 'HOBBIES', accent: '#d9c9a1' },
+  campus: { no: '05', zh: '校园', en: 'CAMPUS LIFE', accent: '#31405e' },
+  hobbies: { no: '06', zh: '兴趣', en: 'HOBBIES', accent: '#d9c9a1' },
 }
 
 export default function Home() {

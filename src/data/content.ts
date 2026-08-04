@@ -45,13 +45,14 @@ export interface SocialLink {
   handle: string
   url: string
   color: string
+  /** 二维码图片（public 路径），可选 */
+  qr?: string
 }
 export const socials: SocialLink[] = [
   { id: 'github', name: { zh: 'GitHub', en: 'GitHub' }, handle: '@gaocan54321', url: 'https://github.com/gaocan54321', color: '#17171b' },
-  { id: 'xiaohongshu', name: { zh: '小红书', en: 'RED' }, handle: '@你的小红书', url: 'https://www.xiaohongshu.com', color: '#ff2442' },
-  { id: 'douyin', name: { zh: '抖音', en: 'Douyin' }, handle: '@你的抖音', url: 'https://www.douyin.com', color: '#161823' },
-  { id: 'bilibili', name: { zh: '哔哩哔哩', en: 'Bilibili' }, handle: 'UID: 占位', url: 'https://www.bilibili.com', color: '#00a1d6' },
-  { id: 'blog', name: { zh: '个人博客', en: 'Blog' }, handle: 'blog.example.com', url: 'https://blog.example.com', color: '#31405e' },
+  { id: 'xiaohongshu', name: { zh: '小红书', en: 'RED' }, handle: '小红书号: 5510949411', url: 'https://xhslink.cn/m/9XO0CTfOfQQ', color: '#ff2442', qr: '/qr/xhs.jpg' },
+  { id: 'douyin', name: { zh: '抖音', en: 'Douyin' }, handle: '抖音号: 44067085490', url: 'https://v.douyin.com/5qopu4M0JV8/', color: '#161823', qr: '/qr/douyin.jpg' },
+  { id: 'bilibili', name: { zh: '哔哩哔哩', en: 'Bilibili' }, handle: 'UID: 397787616', url: 'https://b23.tv/yxyT5fb', color: '#00a1d6', qr: '/qr/bilibili.jpg' },
 ]
 
 /* ---------------- ④ 项目浏览 ---------------- */

@@ -23,15 +23,15 @@ export default function ContactCard({ lang }: Props) {
   const cards = [
     {
       id: 'wechat', name: { zh: '微信', en: 'WeChat' }, value: contact.wechat,
-      color: '#1aad19', rot: '-rotate-2', z: 'z-10', glyph: '微',
+      color: '#1aad19', rot: '-rotate-2', z: 'z-10', glyph: '微', qr: '/qr/wechat.jpg',
     },
     {
       id: 'qq', name: { zh: 'QQ', en: 'QQ' }, value: contact.qq,
-      color: '#12b7f5', rot: 'rotate-1', z: 'z-20', glyph: 'Q',
+      color: '#12b7f5', rot: 'rotate-1', z: 'z-20', glyph: 'Q', qr: '/qr/qq.jpg',
     },
     {
       id: 'email', name: { zh: '邮箱', en: 'E-Mail' }, value: contact.email,
-      color: '#b0382a', rot: '-rotate-1', z: 'z-30', glyph: '@',
+      color: '#b0382a', rot: '-rotate-1', z: 'z-30', glyph: '@', qr: undefined,
     },
   ]
 
@@ -74,6 +74,21 @@ export default function ContactCard({ lang }: Props) {
                     {copiedId === c.id ? ui.copied[lang] : ui.copy[lang]}
                   </button>
                 </div>
+
+                {/* 二维码（微信 / QQ） */}
+                {c.qr && (
+                  <div className="mt-3 flex items-center gap-3 border-t border-dashed border-[#c8b992]/70 pt-3">
+                    <img
+                      src={c.qr}
+                      alt={`${c.name.zh}二维码`}
+                      draggable={false}
+                      className="h-20 w-20 rounded-[3px] border border-[#e5dcc8] object-cover shadow-sm"
+                    />
+                    <p className="handwrite text-[13px] leading-snug text-[#8a7a5e]">
+                      {lang === 'zh' ? '扫码加我，备注来意哦' : 'scan to add me'}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
 

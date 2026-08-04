@@ -24,7 +24,7 @@ const SPECS: Record<LabelKind, LabelSpec> = {
     bg: '#f7f5ef', ink: '#31405e', accent: '#c0392b', dark: false,
   },
   contact: {
-    zh: '联系方式', en: 'CONTACT', no: '02',
+    zh: '联系', en: 'CONTACT', no: '02',
     bg: '#15171c', ink: '#f2f2f0', accent: '#07c160', dark: true,
   },
   social: {
@@ -36,11 +36,11 @@ const SPECS: Record<LabelKind, LabelSpec> = {
     bg: '#f3ecd9', ink: '#5b4a2a', accent: '#c0392b', dark: false,
   },
   campus: {
-    zh: '校园经历', en: 'CAMPUS LIFE', no: '05',
+    zh: '校园', en: 'CAMPUS LIFE', no: '05',
     bg: '#f0ede4', ink: '#4a4438', accent: '#31405e', dark: false,
   },
   hobbies: {
-    zh: '兴趣爱好', en: 'HOBBIES', no: '06',
+    zh: '兴趣', en: 'HOBBIES', no: '06',
     bg: '#26324e', ink: '#e9e4d4', accent: '#d9c9a1', dark: true,
   },
 }
