@@ -49,7 +49,7 @@ export default function CartridgeGallery({ lang, onInsert }: Props) {
     )
     const baseCamZ = 12.6
     camera.position.set(0, 2.6, baseCamZ)
-    camera.lookAt(0, 0.05, 0)
+    camera.lookAt(0, -0.55, 0)
     let camZoom = 1 // 插入动画时相机推进
 
     /* ---------- lights ---------- */
@@ -83,6 +83,11 @@ export default function CartridgeGallery({ lang, onInsert }: Props) {
     scene.add(ground)
 
     /* ---------- cartridges ---------- */
+    const rack = new THREE.Group()
+    rack.scale.setScalar(0.8)
+    rack.position.y = -1.35
+    scene.add(rack)
+
     const carts: Cartridge[] = []
     const spacingX = 3.75
     const spacingY = 2.75
@@ -95,7 +100,7 @@ export default function CartridgeGallery({ lang, onInsert }: Props) {
       cart.group.position.y = cart.baseY
       cart.group.rotation.x = -0.06
       cart.group.userData.sectionId = SECTION_ORDER[i]
-      scene.add(cart.group)
+      rack.add(cart.group)
       carts.push(cart)
     })
 
@@ -237,7 +242,7 @@ export default function CartridgeGallery({ lang, onInsert }: Props) {
       camZoom = THREE.MathUtils.damp(camZoom, inserting ? 0.86 : 1, 5, dt)
       camera.position.x = THREE.MathUtils.damp(camera.position.x, targetCamX, 3, dt)
       camera.position.y = THREE.MathUtils.damp(camera.position.y, targetCamY, 3, dt)
-      camera.lookAt(0, 0.05, 0)
+      camera.lookAt(0, -0.55, 0)
       applyCamZ()
 
       renderer.render(scene, camera)

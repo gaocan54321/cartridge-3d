@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Download } from 'lucide-react'
 import CartridgeGallery from '../components/CartridgeGallery'
+import Character from '../components/Character'
 import SectionModal from '../components/modals/SectionModal'
 import AboutCard from '../components/modals/AboutCard'
 import ContactCard from '../components/modals/ContactCard'
@@ -50,6 +51,13 @@ export default function Home() {
         </h1>
         <p className="mt-1 text-sm text-slate-500">{ui.tagline2[lang]}</p>
       </header>
+
+      {/* 交互人物：头跟着鼠标转 */}
+      <div className="pointer-events-none absolute inset-x-0 top-[14%] z-30 flex justify-center sm:top-[13%]">
+        <div className="w-[clamp(140px,21vh,205px)]">
+          <Character />
+        </div>
+      </div>
 
       {/* 内容面板 */}
       {section && meta && (
