@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Download, Languages } from 'lucide-react'
+import { Download } from 'lucide-react'
 import CartridgeGallery from '../components/CartridgeGallery'
 import SectionModal from '../components/modals/SectionModal'
 import AboutCard from '../components/modals/AboutCard'
@@ -20,7 +20,7 @@ const SECTION_META: Record<SectionId, { no: string; zh: string; en: string; acce
 }
 
 export default function Home() {
-  const [lang, setLang] = useState<Lang>('zh')
+  const lang: Lang = 'zh'
   const [section, setSection] = useState<SectionId | null>(null)
 
   const meta = section ? SECTION_META[section] : null
@@ -32,13 +32,6 @@ export default function Home() {
       {/* 顶部工具栏 */}
       <header className="pointer-events-none absolute inset-x-0 top-0 z-40 flex flex-col items-center pt-6 select-none">
         <div className="pointer-events-auto absolute right-4 top-4 flex items-center gap-2 sm:right-6 sm:top-5">
-          <button
-            onClick={() => setLang((l) => (l === 'zh' ? 'en' : 'zh'))}
-            className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/70 px-3.5 py-1.5 text-xs font-semibold text-slate-600 shadow-sm backdrop-blur transition hover:bg-white"
-          >
-            <Languages size={14} />
-            {lang === 'zh' ? 'EN' : '中文'}
-          </button>
           <a
             href="/resume.pdf"
             download
