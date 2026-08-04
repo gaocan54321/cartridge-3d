@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { createCartridge, type Cartridge, type CartridgeConfig } from '../three/createCartridge'
-import { ui, type Lang, type SectionId } from '../data/content'
+import type { SectionId } from '../data/content'
 
 const SECTION_ORDER: SectionId[] = ['about', 'contact', 'social', 'projects', 'campus', 'hobbies']
 
@@ -15,12 +15,11 @@ const CARTRIDGES: CartridgeConfig[] = [
 ]
 
 interface Props {
-  lang: Lang
   /** 插入动画播放完毕后回调，由父组件打开对应内容面板 */
   onInsert: (id: SectionId) => void
 }
 
-export default function CartridgeGallery({ lang, onInsert }: Props) {
+export default function CartridgeGallery({ onInsert }: Props) {
   const mountRef = useRef<HTMLDivElement>(null)
   const onInsertRef = useRef(onInsert)
   onInsertRef.current = onInsert
@@ -301,10 +300,6 @@ export default function CartridgeGallery({ lang, onInsert }: Props) {
       }}
     >
       <div ref={mountRef} className="absolute inset-0" />
-
-      <footer className="pointer-events-none absolute inset-x-0 bottom-6 flex justify-center select-none">
-        <p className="text-3d-title">{ui.heroTitle[lang]}</p>
-      </footer>
     </div>
   )
 }

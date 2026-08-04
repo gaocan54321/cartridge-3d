@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <div className="relative">
       <ButterflyCursor />
-      <CartridgeGallery lang={lang} onInsert={setSection} />
+      <CartridgeGallery onInsert={setSection} />
 
       {/* 顶部工具栏 */}
       <header className="pointer-events-none absolute inset-x-0 top-0 z-40 flex flex-col items-center pt-6 select-none">
@@ -45,9 +45,6 @@ export default function Home() {
           </a>
         </div>
 
-        <p className="text-[11px] font-semibold tracking-[0.35em] text-slate-400 uppercase">
-          Insert cartridge to continue
-        </p>
         <h1 className="mt-2 text-2xl font-bold tracking-tight text-slate-700">
           我叫高灿，期待和你相遇！
         </h1>
