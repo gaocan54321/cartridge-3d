@@ -34,7 +34,6 @@ export default function ButterflyCursor() {
     let bx = mx
     let by = my
     let visible = false
-    let resting = false // 悬停卡带时收翅停落
     const particles: Particle[] = []
     let lastSpawn = 0
     let raf = 0
@@ -54,12 +53,7 @@ export default function ButterflyCursor() {
       visible = false
       if (bfRef.current) bfRef.current.style.opacity = '0'
     }
-    const onCartHover = (e: Event) => {
-      resting = (e as CustomEvent<boolean>).detail
-      bfRef.current?.classList.toggle('butterfly-rest', resting)
-    }
     window.addEventListener('pointermove', onMove)
-    window.addEventListener('cart-hover', onCartHover)
     document.documentElement.addEventListener('pointerleave', onLeave)
 
     const loop = (now: number) => {
@@ -67,18 +61,17 @@ export default function ButterflyCursor() {
       const dt = Math.min((now - last) / 1000, 0.05)
       last = now
 
-      // 蝴蝶跟随：飞行时轻盈慢阻尼，停落时稳稳落下
-      const k = 1 - Math.exp(-(resting ? 16 : 7) * dt)
+      // 蝴蝶跟随（轻盈的慢阻尼）
+      const k = 1 - Math.exp(-7 * dt)
       bx += (mx - bx) * k
       by += (my - by) * k
-      const wobble = resting ? 0 : Math.sin(now / 240) * 2.5
-      const perch = resting ? 3 : 0 // 停落时微微下沉站稳
+      const wobble = Math.sin(now / 240) * 2.5
       if (bfRef.current) {
-        bfRef.current.style.transform = `translate(${bx - 14}px, ${by - 12 + wobble + perch}px)`
+        bfRef.current.style.transform = `translate(${bx - 14}px, ${by - 12 + wobble}px)`
       }
 
-      // 尾迹粒子（停落时不再拖尾）
-      if (visible && !resting && now - lastSpawn > 26) {
+      // 尾迹粒子
+      if (visible && now - lastSpawn > 26) {
         lastSpawn = now
         particles.push({
           x: bx + (Math.random() - 0.5) * 6,
@@ -116,7 +109,6 @@ export default function ButterflyCursor() {
       cancelAnimationFrame(raf)
       window.removeEventListener('resize', resize)
       window.removeEventListener('pointermove', onMove)
-      window.removeEventListener('cart-hover', onCartHover)
       document.documentElement.removeEventListener('pointerleave', onLeave)
     }
   }, [])
