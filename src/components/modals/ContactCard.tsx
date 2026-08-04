@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import { MessageCircle, Hash, Mail, Copy, Check } from 'lucide-react'
+import { Copy, Check } from 'lucide-react'
 import { contact, ui, type Lang } from '../../data/content'
 
 interface Props {
   lang: Lang
 }
 
-/** 联系方式 · 名片弹窗（微信 / QQ / 邮箱） */
+/** 联系方式 · 三张叠放的票根卡（微信 / QQ / 邮箱），像从卡包里抽出来的一叠 */
 export default function ContactCard({ lang }: Props) {
   const [copiedId, setCopiedId] = useState<string | null>(null)
 
@@ -20,70 +20,72 @@ export default function ContactCard({ lang }: Props) {
     }
   }
 
-  const rows = [
-    { id: 'wechat', label: { zh: '微信', en: 'WeChat' }, value: contact.wechat, icon: MessageCircle, color: '#07c160' },
-    { id: 'qq', label: { zh: 'QQ', en: 'QQ' }, value: contact.qq, icon: Hash, color: '#12b7f5' },
-    { id: 'email', label: { zh: '邮箱', en: 'Email' }, value: contact.email, icon: Mail, color: '#c0392b' },
+  const cards = [
+    {
+      id: 'wechat', name: { zh: '微信', en: 'WeChat' }, value: contact.wechat,
+      color: '#1aad19', rot: '-rotate-2', z: 'z-10', glyph: '微',
+    },
+    {
+      id: 'qq', name: { zh: 'QQ', en: 'QQ' }, value: contact.qq,
+      color: '#12b7f5', rot: 'rotate-1', z: 'z-20', glyph: 'Q',
+    },
+    {
+      id: 'email', name: { zh: '邮箱', en: 'E-Mail' }, value: contact.email,
+      color: '#b0382a', rot: '-rotate-1', z: 'z-30', glyph: '@',
+    },
   ]
 
   return (
-    <div className="mx-auto max-w-md">
-      {/* 深色名片 —— 对应黑色卡带外壳 */}
-      <div className="relative overflow-hidden rounded-xl bg-[#15171c] p-6 shadow-xl sm:p-8">
-        {/* 磁带卷盘装饰 */}
-        <svg viewBox="0 0 120 120" className="absolute -right-6 -top-6 h-32 w-32 opacity-20">
-          <circle cx="60" cy="60" r="52" fill="none" stroke="#f2f2f0" strokeWidth="6" />
-          <circle cx="60" cy="60" r="20" fill="none" stroke="#f2f2f0" strokeWidth="3" />
-          {[0, 120, 240].map((a) => (
-            <path
-              key={a}
-              d="M60 60 L60 14 A46 46 0 0 1 100 83 Z"
-              fill="#07c160"
-              transform={`rotate(${a} 60 60)`}
-              opacity="0.9"
-            />
-          ))}
-          <circle cx="60" cy="60" r="5" fill="#f2f2f0" />
-        </svg>
+    <div className="mx-auto max-w-md py-2">
+      <div className="space-y-[-14px]">
+        {cards.map((c) => (
+          <div
+            key={c.id}
+            className={`relative ${c.z} ${c.rot} overflow-hidden rounded-[4px] bg-[#fdfbf4] shadow-[0_8px_24px_rgba(60,45,20,0.28),inset_0_0_0_1px_rgba(140,120,85,0.3)] transition-transform duration-300 hover:z-40 hover:rotate-0 hover:scale-[1.02]`}
+          >
+            {/* 票根齿孔（左侧打孔线） */}
+            <div className="absolute inset-y-0 left-12 w-px border-l-2 border-dashed border-[#c8b992]/80" />
+            <span className="absolute -left-2 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full bg-[#f4efe3] shadow-[inset_0_0_0_1px_rgba(140,120,85,0.4)]" />
 
-        <p className="font-mono text-[10px] tracking-[0.3em] text-white/40 uppercase">
-          Business Card · No.02
-        </p>
-        <h3 className="mt-1 text-xl font-bold text-white">
-          {lang === 'zh' ? '保持联系' : 'Get in Touch'}
-        </h3>
-
-        <div className="mt-6 space-y-3">
-          {rows.map((row) => (
-            <div
-              key={row.id}
-              className="group flex items-center gap-3 rounded-lg bg-white/[0.06] px-4 py-3 transition hover:bg-white/[0.1]"
-            >
-              <span
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
-                style={{ backgroundColor: `${row.color}22`, color: row.color }}
+            <div className="flex items-stretch">
+              {/* 存根：大字 glyph */}
+              <div
+                className="flex w-12 shrink-0 items-center justify-center text-lg font-bold text-white"
+                style={{ background: c.color }}
               >
-                <row.icon size={18} strokeWidth={2.2} />
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="text-[11px] text-white/45">{row.label[lang]}</p>
-                <p className="truncate font-mono text-sm font-medium text-white">{row.value}</p>
+                <span className="-rotate-90">{c.glyph}</span>
               </div>
-              <button
-                onClick={() => copy(row.id, row.value)}
-                className="flex shrink-0 items-center gap-1 rounded-md border border-white/15 px-2.5 py-1 text-[11px] text-white/70 transition hover:border-white/40 hover:text-white"
-              >
-                {copiedId === row.id ? <Check size={12} /> : <Copy size={12} />}
-                {copiedId === row.id ? ui.copied[lang] : ui.copy[lang]}
-              </button>
-            </div>
-          ))}
-        </div>
 
-        <p className="mt-6 text-center font-mono text-[10px] tracking-[0.25em] text-white/30 uppercase">
-          SIDE A · 60 MIN
-        </p>
+              <div className="min-w-0 flex-1 px-5 py-4 pl-6">
+                <div className="flex items-baseline justify-between gap-2">
+                  <p className="print-serif text-lg font-bold text-[#33302a]">{c.name.zh}</p>
+                  <p className="font-mono text-[9px] tracking-[0.3em] text-[#a08e6c] uppercase">{c.name.en}</p>
+                </div>
+                <div className="mt-2 flex items-center justify-between gap-3">
+                  <p className="truncate font-mono text-sm font-semibold tracking-wide text-[#4d4436]">
+                    {c.value}
+                  </p>
+                  <button
+                    onClick={() => copy(c.id, c.value)}
+                    className="flex shrink-0 items-center gap-1 rounded-[3px] border px-2 py-1 font-mono text-[10px] transition hover:-translate-y-px"
+                    style={{ borderColor: `${c.color}88`, color: c.color, background: `${c.color}0d` }}
+                  >
+                    {copiedId === c.id ? <Check size={11} /> : <Copy size={11} />}
+                    {copiedId === c.id ? ui.copied[lang] : ui.copy[lang]}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* 底部细色带 */}
+            <div className="h-1" style={{ background: c.color }} />
+          </div>
+        ))}
       </div>
+
+      <p className="handwrite mt-5 rotate-[1deg] text-center text-sm text-[#8a7a5e]">
+        {lang === 'zh' ? '随时找我，一般当天回 →' : '— usually replies within a day'}
+      </p>
     </div>
   )
 }
