@@ -20,6 +20,18 @@ export default function ButterflyCursor() {
     const ctx = canvas.getContext('2d')!
     const dpr = Math.min(window.devicePixelRatio, 2)
 
+    // 预渲染粒子纹理，避免每帧 createRadialGradient
+    const particleCanvas = document.createElement('canvas')
+    particleCanvas.width = 64
+    particleCanvas.height = 64
+    const pctx = particleCanvas.getContext('2d')!
+    const gradient = pctx.createRadialGradient(32, 32, 0, 32, 32, 32)
+    gradient.addColorStop(0, 'rgba(255,255,255,0.6)')
+    gradient.addColorStop(0.4, 'rgba(255,255,255,0.2)')
+    gradient.addColorStop(1, 'rgba(255,255,255,0)')
+    pctx.fillStyle = gradient
+    pctx.fillRect(0, 0, 64, 64)
+
     const resize = () => {
       canvas.width = window.innerWidth * dpr
       canvas.height = window.innerHeight * dpr
@@ -93,15 +105,11 @@ export default function ButterflyCursor() {
           continue
         }
         p.y -= dt * 14
-        const r = p.size * p.life * dpr
-        const g = ctx.createRadialGradient(p.x * dpr, p.y * dpr, 0, p.x * dpr, p.y * dpr, r * 3)
-        g.addColorStop(0, `hsla(${p.hue}, 90%, 78%, ${0.55 * p.life})`)
-        g.addColorStop(1, `hsla(${p.hue}, 90%, 70%, 0)`)
-        ctx.fillStyle = g
-        ctx.beginPath()
-        ctx.arc(p.x * dpr, p.y * dpr, r * 3, 0, Math.PI * 2)
-        ctx.fill()
+        const size = p.size * p.life * dpr * 6
+        ctx.globalAlpha = 0.55 * p.life
+        ctx.drawImage(particleCanvas, p.x * dpr - size / 2, p.y * dpr - size / 2, size, size)
       }
+      ctx.globalAlpha = 1
     }
     raf = requestAnimationFrame(loop)
 

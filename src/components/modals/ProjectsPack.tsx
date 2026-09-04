@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight, ExternalLink, Github, Play } from 'lucide-react'
+import { ChevronLeft, ChevronRight, FileText, Globe, Play } from 'lucide-react'
 import { projects, ui, type Lang, type Project } from '../../data/content'
 
 interface Props {
@@ -15,7 +15,7 @@ function MiniCart({ p, active, onClick }: { p: Project; active: boolean; onClick
         active
           ? 'z-10 -translate-y-3 rotate-0 shadow-[0_14px_28px_rgba(40,30,15,0.35)]'
           : 'translate-y-0 rotate-[1.5deg] opacity-60 shadow-[0_4px_10px_rgba(40,30,15,0.25)] hover:opacity-90 hover:-translate-y-1'
-      } ${active ? 'h-32 w-44' : 'h-24 w-32'}`}
+      } ${active ? 'h-32 w-56' : 'h-24 w-48'}`}
       style={{ backgroundColor: p.shellColor }}
     >
       {/* 顶部握把 */}
@@ -27,15 +27,35 @@ function MiniCart({ p, active, onClick }: { p: Project; active: boolean; onClick
       <span className="absolute inset-x-2 bottom-0 h-3 rounded-t-[2px]" style={{ backgroundColor: p.accentColor }} />
       {/* 标签 */}
       <span
-        className="absolute inset-x-2.5 bottom-5 top-2.5 flex flex-col justify-between rounded-[2px] bg-[#f7f2e4] px-2 py-1.5 shadow-[inset_0_0_0_1px_rgba(120,100,70,0.25)]"
+        className="absolute inset-x-2.5 bottom-5 top-2.5 flex flex-col justify-center rounded-[2px] bg-[#f7f2e4] px-2 py-1.5 shadow-[inset_0_0_0_1px_rgba(120,100,70,0.25)]"
       >
         <span className="font-mono text-[8px] tracking-[0.2em] text-[#a08e6c]">{p.period}</span>
-        <span className={`${active ? 'text-sm' : 'text-[11px]'} print-serif font-bold leading-tight text-[#3d3428]`}>
+        <span className={`${active ? 'text-[13px]' : 'text-[10px]'} print-serif font-bold leading-tight text-[#3d3428] whitespace-nowrap text-center`}>
           {p.title.zh}
         </span>
         <span className="h-0.5 w-6 rounded-full bg-[#b0382a]" />
       </span>
     </button>
+  )
+}
+
+/** 金色月桂枝（奖项框装饰），flip 时镜像 */
+function Laurel({ flip }: { flip?: boolean }) {
+  return (
+    <svg viewBox="0 0 20 44" className={`h-9 w-4 shrink-0 ${flip ? '-scale-x-100' : ''}`} fill="none" aria-hidden>
+      <path d="M16 3C6 12 6 32 16 41" stroke="#c9a24a" strokeWidth="1.4" strokeLinecap="round" />
+      {[8, 15, 22, 29, 36].map((y, i) => (
+        <ellipse
+          key={y}
+          cx={10 - i * 0.6}
+          cy={y}
+          rx="4"
+          ry="1.7"
+          fill="#c9a24a"
+          transform={`rotate(${-32 + i * 7} ${10 - i * 0.6} ${y})`}
+        />
+      ))}
+    </svg>
   )
 }
 
@@ -57,7 +77,7 @@ export default function ProjectsPack({ lang }: Props) {
           {window_.map((_, slot) => (
             <span
               key={slot}
-              className={`rounded-[3px] bg-[#8e9bac]/60 shadow-[inset_0_2px_5px_rgba(50,60,80,0.45)] ${slot === 2 ? 'w-44' : 'w-32'}`}
+              className={`rounded-[3px] bg-[#8e9bac]/60 shadow-[inset_0_2px_5px_rgba(50,60,80,0.45)] ${slot === 2 ? 'w-56' : 'w-48'}`}
             />
           ))}
         </div>
@@ -94,49 +114,122 @@ export default function ProjectsPack({ lang }: Props) {
           <span className="font-mono text-[10px] tracking-[0.25em] text-[#a08e6c]">{p.period} · 使用说明书</span>
         </div>
 
-        <p className="mt-3 text-[13px] leading-[1.9] text-[#5d5344]">{p.desc[lang]}</p>
+        {/* 一句话 slogan */}
+        {p.slogan && (
+          <p className="mt-2 border-l-[3px] border-[#b0382a] pl-3 print-serif text-[15px] font-bold tracking-wide text-[#b0382a]">
+            {p.slogan[lang]}
+          </p>
+        )}
 
-        {/* 规格表：虚线行 */}
-        <div className="mt-4 space-y-1.5">
-          {p.tags.map((t, i) => (
-            <div key={t} className="flex items-baseline gap-2 font-mono text-[11px] text-[#6b5c44]">
-              <span className="text-[#b0382a]">{String(i + 1).padStart(2, '0')}</span>
-              <span>{t}</span>
-              <span className="flex-1 border-b border-dotted border-[#c8b992]" />
+        {/* 项目介绍导语 */}
+        <p className="print-serif mt-3 text-[13.5px] leading-[2] text-[#3d3428]">{p.desc[lang]}</p>
+
+        {/* 项目成果：黑金奖牌框 */}
+        {p.awards && p.awards.length > 0 && (
+          <div className="mt-4 rounded-[3px] border border-[#c9a24a]/45 bg-[#17181c] px-4 py-3.5 shadow-[inset_0_0_0_1px_rgba(201,162,74,0.18),0_4px_14px_rgba(20,15,5,0.35)]">
+            <p className="text-center font-mono text-[9px] tracking-[0.4em] text-[#c9a24a]/90">
+              {lang === 'zh' ? '项目成果 · AWARDS' : 'AWARDS'}
+            </p>
+            <div className={`mt-2.5 grid gap-2.5 justify-items-center ${
+              p.awards.length === 1 ? 'grid-cols-1' :
+              p.awards.length === 2 ? 'grid-cols-2 sm:grid-cols-2 max-w-md mx-auto' :
+              'sm:grid-cols-3'
+            }`}>
+              {p.awards.map((a) => (
+                <div key={a.track.zh} className="flex flex-col items-center gap-1 rounded-[2px] border border-[#c9a24a]/25 bg-[#1d1f24] px-2 py-2.5">
+                  <div className="flex items-center gap-1.5">
+                    <Laurel />
+                    <span className="print-serif text-[15px] font-bold text-[#e8c76a]">{a.rank[lang]}</span>
+                    <Laurel flip />
+                  </div>
+                  <p className="text-center font-mono text-[9px] leading-relaxed tracking-[0.14em] text-[#9aa0ad]">
+                    {a.track[lang]}
+                  </p>
+                </div>
+              ))}
             </div>
+          </div>
+        )}
+
+        {/* 结构化段落：项目介绍 / 我的工作 / 技术方案… */}
+        {p.sections && p.sections.length > 0 && (
+          <div className="mt-5 space-y-4">
+            {p.sections.map((s, si) => (
+              <section key={s.heading.zh}>
+                <h4 className="flex items-baseline gap-2 border-b-2 border-[#3d3428]/70 pb-1 print-serif text-[13px] font-bold tracking-[0.12em] text-[#3d3428]">
+                  <span className="font-mono text-[10px] font-normal tracking-[0.2em] text-[#b0382a]">
+                    {String(si + 1).padStart(2, '0')}
+                  </span>
+                  {s.heading[lang]}
+                  <span className="ml-auto font-mono text-[8px] font-normal tracking-[0.2em] text-[#a08e6c] uppercase">
+                    {s.heading.en}
+                  </span>
+                </h4>
+                {s.body && <p className="print-serif mt-2 text-[13.5px] leading-[2] text-[#3d3428]">{s.body[lang]}</p>}
+                {s.items && (
+                  <ul className="print-serif mt-2 space-y-1.5">
+                    {s.items.map((it) => (
+                      <li key={it.zh} className="flex gap-2 text-[13.5px] leading-[2] text-[#3d3428]">
+                        <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rotate-45 bg-[#b0382a]" />
+                        <span>{it[lang]}</span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            ))}
+          </div>
+        )}
+
+        {/* 技术标签：复古印刷小标 */}
+        <div className="mt-4 flex flex-wrap gap-2">
+          {p.tags.map((t) => (
+            <span key={t} className="rounded-[3px] border border-[#5d4f3a]/70 bg-[#3d3428] px-2.5 py-1 font-mono text-[10.5px] font-semibold tracking-[0.06em] text-[#f4efe3] shadow-[0_1.5px_0_rgba(0,0,0,0.35)]">
+              {t}
+            </span>
           ))}
         </div>
 
-        {/* 截图：半调网点印刷 */}
-        <div className="mt-4 grid grid-cols-3 gap-2">
-          {[0, 1, 2].map((i) => (
-            <div key={i} className="halftone flex h-20 items-center justify-center rounded-[2px] border border-[#c8b992]/70 sm:h-24"
-              style={{ backgroundColor: `hsl(${(30 + index * 70 + i * 25) % 360} 30% 72%)` }}>
-              <span className="rounded-sm bg-[#faf6ea]/80 px-1.5 font-mono text-[9px] tracking-[0.25em] text-[#6b5c44]">
-                FIG.{i + 1}
-              </span>
-            </div>
-          ))}
-        </div>
+        {/* 实拍/宣传图：贴上去的照片（无图时直接隐藏） */}
+        {p.images && p.images.length > 0 && (
+          <div className="mt-4">
+            <figure className="relative rotate-[0.4deg] rounded-[2px] bg-white p-1.5 shadow-[0_5px_16px_rgba(60,45,20,0.3)]">
+              <img src={p.images[0].src} alt={p.images[0].alt[lang]} className="w-full rounded-[1px]" />
+            </figure>
+            {p.images.slice(1).map((img, i) => (
+              <figure
+                key={img.src}
+                className={`relative -mt-6 w-[64%] rounded-[2px] bg-white p-1.5 shadow-[0_6px_18px_rgba(60,45,20,0.35)] transition hover:rotate-0 ${
+                  i % 2 === 0 ? 'ml-auto mr-3 rotate-[1.8deg]' : 'ml-3 -rotate-[1.8deg]'
+                }`}
+              >
+                <img src={img.src} alt={img.alt[lang]} className="w-full rounded-[1px]" />
+                <figcaption className="mt-1 text-center font-mono text-[8px] tracking-[0.18em] text-[#8a7a5e]">
+                  {img.alt[lang]}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        )}
 
-        {/* 快捷访问：印章按钮 */}
+        {/* 快捷访问：平台品牌色按钮（统一尺寸 / 字体 / 圆角） */}
         <div className="mt-5 flex flex-wrap gap-2.5">
-          {p.demoUrl && (
-            <a href={p.demoUrl} target="_blank" rel="noreferrer"
-              className="flex -rotate-1 items-center gap-1.5 rounded-[3px] bg-[#33302a] px-3.5 py-1.5 font-mono text-[11px] font-semibold text-[#f4efe3] shadow-[0_2px_0_rgba(0,0,0,0.4)] transition hover:-translate-y-0.5">
-              <ExternalLink size={12} /> {ui.demo[lang]}
-            </a>
-          )}
-          {p.repoUrl && (
-            <a href={p.repoUrl} target="_blank" rel="noreferrer"
-              className="flex rotate-[0.8deg] items-center gap-1.5 rounded-[3px] border border-[#8a7a5e]/60 bg-[#efe8d6] px-3.5 py-1.5 font-mono text-[11px] font-semibold text-[#5d4f3a] shadow-[0_2px_0_#8a7a5e55] transition hover:-translate-y-0.5">
-              <Github size={12} /> {ui.repo[lang]}
-            </a>
-          )}
           {p.videoUrl && (
             <a href={p.videoUrl} target="_blank" rel="noreferrer"
-              className="seal flex -rotate-[0.8deg] items-center gap-1.5 rounded-[3px] px-3.5 py-1.5 font-mono text-[11px] font-semibold transition hover:-translate-y-0.5">
+              className="flex items-center gap-1.5 rounded-[3px] bg-[#FB7299] px-3.5 py-1.5 font-mono text-[11px] font-semibold text-white shadow-[0_2px_0_rgba(251,114,153,0.45)] transition hover:-translate-y-0.5">
               <Play size={12} /> {ui.video[lang]}
+            </a>
+          )}
+          {p.articleUrl && (
+            <a href={p.articleUrl} target="_blank" rel="noreferrer"
+              className="flex items-center gap-1.5 rounded-[3px] bg-[#3370FF] px-3.5 py-1.5 font-mono text-[11px] font-semibold text-white shadow-[0_2px_0_rgba(51,112,255,0.45)] transition hover:-translate-y-0.5">
+              <FileText size={12} /> {ui.article[lang]}
+            </a>
+          )}
+          {p.adxUrl && (
+            <a href={p.adxUrl} target="_blank" rel="noreferrer"
+              className="flex items-center gap-1.5 rounded-[3px] bg-[#FF7A2E] px-3.5 py-1.5 font-mono text-[11px] font-semibold text-white shadow-[0_2px_0_rgba(255,122,46,0.45)] transition hover:-translate-y-0.5">
+              <Globe size={12} /> {ui.adxSite[lang]}
             </a>
           )}
         </div>

@@ -3,7 +3,7 @@ import * as THREE from 'three'
 import { createCartridge, type Cartridge, type CartridgeConfig } from '../three/createCartridge'
 import type { SectionId } from '../data/content'
 
-const SECTION_ORDER: SectionId[] = ['about', 'contact', 'social', 'projects', 'campus', 'hobbies']
+const SECTION_ORDER: SectionId[] = ['about', 'contact', 'social', 'projects', 'campus', 'internships']
 
 const CARTRIDGES: CartridgeConfig[] = [
   { label: 'about', shellColor: '#eef0f3' },
@@ -11,7 +11,7 @@ const CARTRIDGES: CartridgeConfig[] = [
   { label: 'social', shellColor: '#a9c3e6', accentColor: '#8fadd6' },
   { label: 'projects', shellColor: '#d9c9a1', accentColor: '#c9b78d' },
   { label: 'campus', shellColor: '#cfc9b8', accentColor: '#bcb5a2' },
-  { label: 'hobbies', shellColor: '#31405e', accentColor: '#263350' },
+  { label: 'internships', shellColor: '#31405e', accentColor: '#263350' },
 ]
 
 interface Props {
@@ -83,7 +83,7 @@ export default function CartridgeGallery({ onInsert }: Props) {
 
     /* ---------- cartridges ---------- */
     const rack = new THREE.Group()
-    rack.scale.setScalar(0.8)
+    rack.scale.setScalar(0.53)
     rack.position.y = -1.35
     scene.add(rack)
 

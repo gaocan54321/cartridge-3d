@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 
-export type LabelKind = 'about' | 'contact' | 'social' | 'projects' | 'campus' | 'hobbies'
+export type LabelKind = 'about' | 'contact' | 'social' | 'projects' | 'campus' | 'internships'
 
 const W = 640
 const H = 420
@@ -39,8 +39,8 @@ const SPECS: Record<LabelKind, LabelSpec> = {
     zh: '校园', en: 'CAMPUS LIFE', no: '05',
     bg: '#f0ede4', ink: '#4a4438', accent: '#31405e', dark: false,
   },
-  hobbies: {
-    zh: '兴趣', en: 'HOBBIES', no: '06',
+  internships: {
+    zh: '实习', en: 'INTERNSHIPS', no: '06',
     bg: '#26324e', ink: '#e9e4d4', accent: '#d9c9a1', dark: true,
   },
 }

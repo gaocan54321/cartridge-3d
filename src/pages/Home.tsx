@@ -9,7 +9,7 @@ import ContactCard from '../components/modals/ContactCard'
 import SocialCard from '../components/modals/SocialCard'
 import ProjectsPack from '../components/modals/ProjectsPack'
 import CampusWall from '../components/modals/CampusWall'
-import HobbiesWall from '../components/modals/HobbiesWall'
+import InternshipsPack from '../components/modals/InternshipsPack'
 import { ui, type Lang, type SectionId } from '../data/content'
 
 const SECTION_META: Record<SectionId, { no: string; zh: string; en: string; accent: string }> = {
@@ -18,7 +18,7 @@ const SECTION_META: Record<SectionId, { no: string; zh: string; en: string; acce
   social: { no: '03', zh: '社媒', en: 'SOCIAL LINKS', accent: '#2f6fd6' },
   projects: { no: '04', zh: '项目', en: 'PROJECTS', accent: '#c0392b' },
   campus: { no: '05', zh: '校园', en: 'CAMPUS LIFE', accent: '#31405e' },
-  hobbies: { no: '06', zh: '兴趣', en: 'HOBBIES', accent: '#d9c9a1' },
+  internships: { no: '06', zh: '实习', en: 'INTERNSHIPS', accent: '#d9c9a1' },
 }
 
 export default function Home() {
@@ -66,14 +66,13 @@ export default function Home() {
           titleEn={meta.en}
           accent={meta.accent}
           onClose={() => setSection(null)}
-          rawBody={section === 'hobbies'}
         >
           {section === 'about' && <AboutCard lang={lang} />}
           {section === 'contact' && <ContactCard lang={lang} />}
           {section === 'social' && <SocialCard lang={lang} />}
           {section === 'projects' && <ProjectsPack lang={lang} />}
           {section === 'campus' && <CampusWall lang={lang} />}
-          {section === 'hobbies' && <HobbiesWall lang={lang} />}
+          {section === 'internships' && <InternshipsPack lang={lang} />}
         </SectionModal>
       )}
     </div>
