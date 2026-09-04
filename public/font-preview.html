@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>首屏问候语字体候选 · 预览</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+KuaiLe&family=Zhi+Mang+Xing&family=Long+Cang&family=Noto+Serif+SC:wght@600;900&family=Liu+Jian+Mao+Cao&display=swap"
+  rel="stylesheet"
+/>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    background: radial-gradient(1200px 700px at 50% 30%, #fbfcfe 0%, #eef1f5 55%, #e3e8ee 100%);
+    font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    padding: 48px 24px 64px;
+  }
+  .head { text-align: center; margin-bottom: 36px; color: #64748b; font-size: 13px; letter-spacing: .2em; }
+  .grid {
+    max-width: 880px; margin: 0 auto;
+    display: flex; flex-direction: column; gap: 22px;
+  }
+  .card {
+    background: rgba(255,255,255,.55);
+    border: 1px solid rgba(148,163,184,.25);
+    border-radius: 12px;
+    padding: 34px 32px 26px;
+    text-align: center;
+    backdrop-filter: blur(4px);
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(49,64,94,.12); }
+  .tag {
+    display: inline-block; margin-bottom: 18px;
+    font-size: 11px; letter-spacing: .25em; color: #94a3b8;
+    border: 1px solid rgba(148,163,184,.4); border-radius: 999px; padding: 3px 12px;
+  }
+  .sample { font-size: clamp(26px, 4.2vw, 40px); line-height: 1.5; color: #334155; }
+  .note { margin-top: 14px; font-size: 12px; color: #94a3b8; }
+
+  /* A 印刷宋体 + 印章句读 */
+  .f-a { font-family: "Noto Serif SC", "Songti SC", SimSun, serif; font-weight: 900; letter-spacing: .06em; color: #33302a; }
+  .f-a .bang {
+    display: inline-block; background: #b0382a; color: #f4efe3;
+    border-radius: 4px; padding: 0 .18em; margin-left: .08em;
+    transform: rotate(6deg); font-size: .82em;
+    box-shadow: inset 0 0 0 2px rgba(244,239,227,.5), 0 2px 5px rgba(80,30,20,.3);
+  }
+  /* B 手写行楷 */
+  .f-b { font-family: "Ma Shan Zheng", "STXingkai", "Kaiti SC", KaiTi, cursive; font-size: clamp(32px, 5vw, 48px); color: #3d3428; }
+  /* C 快乐体（圆润，配3D小人） */
+  .f-c { font-family: "ZCOOL KuaiLe", "YouYuan", "Microsoft YaHei", sans-serif; color: #31405e; letter-spacing: .03em; }
+  /* D 粗黑 + 手绘波浪下划线 */
+  .f-d { font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; font-weight: 800; color: #334155; }
+  .f-d .wave {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='8'%3E%3Cpath d='M0 5 Q 10 0, 20 5 T 40 5' fill='none' stroke='%23c0392b' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E") bottom left repeat-x;
+    padding-bottom: 10px;
+  }
+  /* E 狂放草书 */
+  .f-e { font-family: "Liu Jian Mao Cao", "STXingkai", cursive; font-size: clamp(34px, 5.4vw, 52px); color: #26324e; }
+  /* F 志莽行书 + 藏青 */
+  .f-f { font-family: "Zhi Mang Xing", "STXingkai", KaiTi, cursive; font-size: clamp(32px, 5vw, 48px); color: #31405e; }
+</style>
+</head>
+<body>
+  <p class="head">首 屏 问 候 语 · 字 体 候 选</p>
+  <div class="grid">
+
+    <div class="card">
+      <span class="tag">A · 印刷宋体 + 红印章</span>
+      <p class="sample f-a">我叫高灿，期待和你相遇<span class="bang">！</span></p>
+      <p class="note">和内容面板的凸版印刷 / 红印章一脉相承，最有"档案册"整体感</p>
+    </div>
+
+    <div class="card">
+      <span class="tag">B · 手写行楷（马善政体）</span>
+      <p class="sample f-b">我叫高灿，期待和你相遇！</p>
+      <p class="note">像亲手写在贺卡上的一句话，温暖、有人味</p>
+    </div>
+
+    <div class="card">
+      <span class="tag">C · 快乐体（圆润卡通）</span>
+      <p class="sample f-c">我叫高灿，期待和你相遇！</p>
+      <p class="note">圆润俏皮，和页面上那个 3D 卡通小人气质最搭</p>
+    </div>
+
+    <div class="card">
+      <span class="tag">D · 粗黑 + 手绘波浪线</span>
+      <p class="sample f-d">我叫高灿，<span class="wave">期待和你相遇</span>！</p>
+      <p class="note">现代干净，红色手绘波浪线是唯一的装饰，克制又活泼</p>
+    </div>
+
+    <div class="card">
+      <span class="tag">E · 狂放草书（毛草体）</span>
+      <p class="sample f-e">我叫高灿，期待和你相遇！</p>
+      <p class="note">最有张力的一款，像签名墙，个性强但略挑场合</p>
+    </div>
+
+    <div class="card">
+      <span class="tag">F · 志莽行书</span>
+      <p class="sample f-f">我叫高灿，期待和你相遇！</p>
+      <p class="note">介于行楷与草书之间，飘逸但可读性好</p>
+    </div>
+
+  </div>
+  <p class="head" style="margin-top:40px">告诉我编号（可组合，如「C 的字体 + A 的红印章」），我再改到站点里</p>
+</body>
+</html>
